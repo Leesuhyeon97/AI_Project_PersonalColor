@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.example.demo.dao.CommentDAO">
+  
+     <select id="commentCount" resultType="int">
+       select count(*) from comment
+    </select>
+    
+    <select id="commentList" parameterType="commentVO" resultType="commentVO">
+     select * from comment where bno=#{bno}
+    </select>
+    
+    
+    <insert id="commentInsert" parameterType="commentVO" >
+        insert into comment(cno,bno,content,writer,reg_date) values(#{cno},#{bno},#{content},#{writer},now())
+    </insert>
+    
+    <update id="commentUpdate" parameterType="commentVO">
+      update comment set content=#{content} where cno=#{cno}
+    </update>
+    
+    <delete id="commentDelete" parameterType="int" >
+      delete from comment where cno=#{cno}
+    </delete>
+
+	<select id="selectWriter" parameterType="int" resultType="String">
+	select writer from comment where cno=#{cno}
+	</select>
+  
+  
+  </mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.ScrapBoxDAO">	
+	
+	<select id="scrapList"  resultType="scrapVO" parameterType="scrapVO">
+	select * from scrapbox where id =#{id}
+	</select>	
+	
+	<insert id="insertScrap" parameterType="scrapVO">
+	<![CDATA[
+		insert into scrapbox(bid, id,title,content,fileName) 
+		values(#{bid}, #{id}, #{title}, #{content},#{fileName} )
+	]]>
+	</insert>
+
+	<select id="viewScrapArticle"  resultType="scrapVO" parameterType="int">
+		select * from scrapbox where no=#{no}
+	</select>
+	
+	  <delete id="deleteScrap" parameterType="int" >
+      delete from scrapbox where no=#{no}
+    </delete>
+</mapper>

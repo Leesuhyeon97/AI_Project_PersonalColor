@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퍼스널컬러 진단하기</title>
+  <!--jquery lib-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!--bootstrap css-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
+  <!--javascript 영역-->
+  <script src="../js/my.js"></script>
+  <script>
+  $(document).ready(function(){
+      $("#main").fadeIn(2000);
+      console.log(localStorage.getItem('pColorResult')); 
+  		var resultData=JSON.parse(localStorage.getItem('pColorResult'));
+  		console.log(resultData);
+  		
+		$("#drawCanvas").attr('style', "border: 1px solid #993300");
+		const canvas = document.getElementById("drawCanvas");
+		const context = canvas.getContext("2d");
+		const image= new Image();
+		
+		
+
+		canvas.width = 200; //가로 100px
+		canvas.height = 260; //세로 100px
+		
+		const path = "getImg/test.png";
+		image.src = path;
+		image.onload = function() {
+			context.drawImage(image, 0, 0);
+			context.strokeStyle = 'yellow';
+			context.lineWidth = 3;
+
+
+			const x = (resultData[1].result2.faces[0].roi.x);
+			const y = (resultData[1].result2.faces[0].roi.y);
+
+
+			const width = (resultData[1].result2.faces[0].roi.width);
+			const height = (resultData[1].result2.faces[0].roi.height);
+
+
+			console.log(x, y, width, height);
+
+			context.strokeRect(x, y, width, height);
+		}
+		$("#insertPcolorBtn").click(function() {
+			
+			const pColor = "봄 웜톤";
+			$.post('insertPcolorInColorBox', { pColor}, function(data) {
+				data = JSON.parse(data);
+				if (data.success) {
+					alert(data.success);
+				} else {
+					alert(data.msg);
+				}
+
+			});
+		});
+	    
+    });
+  
+    
+  </script>
+  <style>
+    body {
+      margin:10px;
+      background-image: url('../img/gradient-bg.jpg');
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .main-container {
+      width: 590px;
+      height: 670px;
+      background-color: white;
+      background-size: cover;
+      padding: 20px; 
+    }
+
+    #main {
+      display: none;
+    }
+
+    .imgBox {
+      border: 1px solid;
+      padding: 5px;
+      border-color : white;
+      width: 200px;
+      height: 220px;
+      margin-top: 30px;
+    }
+
+  </style>
+  <script type="text/javascript">
+  
+  
+  </script>
+</head>
+<body>
+   
+    <div class="main-container" id="main">
+        <center>
+          <div>
+            <h1 style="font-weight:bold; color:rgb(51, 51, 51);" class="mt-3">당신의 컬너는??
+              <span id="colorBg" class="badge" style="background-color: #F68863;">봄 웜톤</span></h1> 
+          </div>
+          <div class="imgBox" id="resultDiv">
+            <canvas id="drawCanvas"></canvas>
+          </div>
+          <div class="mt-3">
+            <p style="font-size: small; color: lightslategray;">Best Color</p>
+            <img src="../img/spring_palette.png" width="300">
+          </div>
+          <div style="font-size: smaller;" class="mt-2">
+            <hr>
+            <p>봄 웜톤은 대부분 온화하고 부드러운 이미지, 따뜻한 톤을 지니고 있습니다.<br>
+            발랄하고, 젊으며, 따뜻하고 밝은 투명한 느낌으로 <strong>고명도 저채도</strong>의 색상이 잘 어울립니다.<br>
+            무겁고 칙칙한 색, 무채색, 은색, 와인색 등은 피하는 것이 좋습니다.</p>
+          </div>
+
+          <div class="mt-4">
+            <a id="kakao-link-btn" href="javascript:kakaoShare()">
+              <button class="btn btn-sm" style="font-size: small; background-color: rgb(142, 68, 173); color: white; font-weight: bold;">카카오톡으로 공유하기</button>
+            </a>
+          </div>
+            <div class="d-grid col-6 mt-3">
+          <button id="ItemBtn" class="btn"  style="background-color: white; font-weight: bold; color: rgb(142, 68, 173); font-size: smaller;" onclick='window.open("item.html", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=100,left=300,width=800,height=800");'>봄 웜톤에 추천하는 패션아이템</button>
+        </div>
+        <div class="d-grid col-6 mt-3">
+          <button id="insertPcolorBtn" class="btn"  style="background-color: white; font-weight: bold; color: rgb(142, 68, 173); font-size: smaller;">myColorBox에 결과값 추가</button>
+        </div>
+          <!--카카오톡 API 연동-->
+          <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+          <script type="text/javascript">
+            // SDK를 초기화 합니다. 사용할 앱의 JavaScript 키를 설정해 주세요.
+            Kakao.init('83f91ef025c32675809ac9317be4d49e');
+          
+            // SDK 초기화 여부를 판단합니다.
+            console.log(Kakao.isInitialized());
+          
+            function kakaoShare() {
+                Kakao.Link.sendDefault({
+                  objectType: 'feed',
+                  content: {
+                    title: '퍼스널컬러 진단결과 - 봄 웜톤',
+                    description: '링크를 눌러 퍼스널 컬러를 무료로 진단해 보세요',
+                    imageUrl: '../getImg/spring_result.png',
+                    link: {
+                      mobileWebUrl: '카카오공유하기 시 클릭 후 이동 경로',
+                      webUrl: '카카오공유하기 시 클릭 후 이동 경로',
+                    },
+                  },
+                  buttons: [
+                    {
+                      title: '웹으로 보기',
+                      link: {
+                        mobileWebUrl: 'http://15.165.160.136:8080/objectDetection.html',
+                        webUrl: 'http://15.165.160.136:8080/objectDetection.html',
+                      },
+                    },
+                  ],
+                  // 카카오톡 미설치 시 카카오톡 설치 경로이동
+                  installTalk: true,
+                })
+              }
+          </script>
+
+        
+        
+        </center>
+
+    </div>
+  
+  
+</body>
+</html>

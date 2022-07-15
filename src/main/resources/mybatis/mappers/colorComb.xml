@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  <mapper namespace="com.example.demo.dao.ColorCombDAO">
+  
+  	<insert id="insertColorComb" parameterType="colorCombVO">
+  		 <![CDATA[
+      insert into colorcomb (id,top,bottom, shoes) 
+      values( #{id}, #{top}, #{bottom}, #{shoes})
+   ]]>
+
+  	</insert>
+  	<select id="selectAllColorCombList" parameterType="String" resultType="colorCombVO" >
+		select * from colorcomb where id=#{id}
+	</select>
+  	   <delete id="deleteRow" parameterType="int">
+      delete from colorcomb where no=#{no}
+   </delete >
+  	
+  </mapper>
